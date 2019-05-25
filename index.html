@@ -1,0 +1,183 @@
+  <!DOCTYPE html>
+  <html>
+
+  <head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta charset="utf-8">
+
+      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <style>
+          #contenido {
+              display: flex;
+              flex-wrap: wrap;
+              width: 80%;
+          }
+
+          .tarjeta {
+              width: 20%;
+              margin: 20px;
+          }
+      </style>
+
+  </head>
+
+  <body>
+
+      <p>Date: <input type="text" id="datepicker"></p>
+
+      <p>Tema: <input type="text" id="tema"></p>
+      <div class="container">
+
+          <button id="boton" class="btn waves-effect waves-light" type="reset" style="width: 100%;">News
+              <i class="material-icons right">send</i>
+
+          </button>
+
+
+          <button id="boton_user" class="btn waves-effect waves-light red" type="reset" style="width: 100%;">User
+              <i class="material-icons right">send</i>
+
+          </button>
+
+          <div class="center-align" id="contenido">
+
+          </div>
+
+          <div id="contenido_2">
+
+          </div>
+
+
+          <div id="contenido3">
+
+          </div>
+      </div>
+      <div class="container">
+
+          <table id="tabla">
+
+
+              <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Item Name</th>
+                  </tr>
+              </thead>
+
+              <tbody>
+
+                  <tr>
+
+
+                  </tr>
+              </tbody>
+          </table>
+
+      </div>
+
+      <!--JavaScript at end of body for optimized loading-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+      <script>
+          $(function () {
+              $("#datepicker").datepicker({
+                  format: "yyyy-mm-dd"
+              });
+
+
+          });
+      </script>
+
+
+      <script type="text/javascript">
+          var calendario = document.querySelector('#datepicker');
+          var tema = document.querySelector('#tema');
+
+          var contenido = document.querySelector('#contenido');
+          document.querySelector('#boton').addEventListener('click', function () {
+
+              console.log(calendario.value)
+
+              var url = 'https://newsapi.org/v2/everything?q=' + tema.value + '&from=' + calendario.value +
+                  '&sortBy=publishedAt&apiKey=mi_api';
+              var req = new Request(url);
+              fetch(url)
+                  .then(res => res.json())
+                  .then(data => {
+
+                      console.log(data.articles[2].title)
+                      console.log(data.articles)
+                      document.getElementById('tabla').innerHTML = "";
+                      contenido.innerHTML += calendario.value;
+
+                      for (let indice in data.articles) {
+
+
+                          document.getElementById('tabla').innerHTML += `	
+								
+								   
+					            <td>${data.articles[indice].title}</td>
+					            
+					            <td><image src="${data.articles[indice].urlToImage}" width=50px height=50px></td>
+					            
+					          			`
+                      }
+                      for (let indice in data.articles) {
+
+
+                          document.getElementById('contenido').innerHTML += `	
+      
+                                                    
+                                                                    <div class="tarjeta">
+                                                <h4 class="header">Horizontal Card</h4>
+                                                <div class="card">
+                                                <div class="card-image">
+                                                    <img src="${data.articles[indice].urlToImage}">
+                                                </div>
+                                                <div class="card-stacked">
+                                                    <div class="card-content">
+                                                    <p id="articulo">${data.articles[indice].title}</p>
+                                                    </div>
+                                                    <a href=mipagina3.html?dato1=${indice}&dato2=${tema.value}&dato3=${calendario.value}>Descripcion</a>
+
+                                                </div>
+                                                </div>
+                                           </div> `
+
+                      }
+
+                  })
+          })
+
+
+          var contenido2 = document.querySelector('#contenido_2');
+          document.querySelector('#boton_user').addEventListener('click', function () {
+
+              fetch('https://randomuser.me/api/') // api publica de usuarios aleatorios.
+                  .then(data => data.json())
+                  .then(data => {
+                      console.log(data.results);
+                      contenido2.innerHTML = `<img src="${data.results['0'].picture.large}" width="100px" >
+               <p>${data.results[0].name.first}</p>    //imprime imagen de usuario en web, en contenido2 
+               													 //y el nombre del usuario debajo de contenido2.								`
+
+                  })
+
+          })
+      </script>
+      <script>
+          document.querySelector('#boton').addEventListener('click', function () {
+              document.getElementById("contenido3").innerHTML = "me cagosss fafafa"
+          })
+      </script>
+  </body>
+
+  </html>
